@@ -12,7 +12,7 @@ In the executable `main.cpp`, the following parameters can be set.
 - `b` : number of keys a leaf can store
 
 An automatic benchmark is given in `evaluate.sh`.
-The produced output can be interpreted with [https://github.com/koeppl/sqlplot](sqlplot). 
+The produced output can be interpreted with [sqlplot](https://github.com/koeppl/sqlplot)
 
 
 
