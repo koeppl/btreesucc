@@ -48,6 +48,18 @@ int main()
     auto end = chrono::high_resolution_clock::now();
     const int64_t inserttime = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 
+    // キーの検索と計測
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < BTREE_SIZE; i++)
+    {
+        auto ret_itr = lbb.find(data[i]);
+        if (ret_itr == lbb.end())
+        {
+            std::cerr << "find-error: searching for key " << data[i] << " but not found." << std::endl;
+        }
+    }
+    end = chrono::high_resolution_clock::now();
+    const int64_t findtime = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 
     // キーの削除と計測
     start = chrono::high_resolution_clock::now();
@@ -64,6 +76,7 @@ int main()
               << " size=" << BTREE_SIZE 
 							<< " flavor=stdset" 
 							<< " insert_nano=" << inserttime
+   							<< " find_nano=" << findtime
 							<< " remove_nano=" << removetime
 							<< " random_seed=" << BTREE_SEED
 							<< std::endl;

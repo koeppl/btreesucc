@@ -80,6 +80,19 @@ int main()
     auto mem_a_internal2 = lbb.byte_internal2();
     auto mem_a_leaf = lbb.byte_leaf();
 
+    // キーの検索と計測
+    start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < SIZE; i++)
+    {
+        auto found_value = lbb.find(data[i]);
+        if (found_value != data[i])
+        {
+            std::cerr << "find-error: searching for key " << data[i] << " but we found " << found_value << std::endl;
+        }
+    }
+    end = chrono::high_resolution_clock::now();
+    const int64_t findtime = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
+
     // キーの削除と計測
     start = chrono::high_resolution_clock::now();
     for (int i = 0; i < SIZE; i++)
@@ -115,6 +128,7 @@ int main()
 							<< " internals=" << internals
 							<< " leaves=" << leaves
 							<< " insert_nano=" << inserttime
+							<< " find_nano=" << findtime
 							<< " remove_nano=" << removetime
 							<< " mem_byte=" << mem
 							<< " height=" << height

@@ -28,16 +28,14 @@ for size in 1310720 2359296 3407872; do
 			for tp in $(seq $tplower 32 256) 512; do
 				((blower=tp*2))
 				for b in $(seq $blower 64 256) 1024; do
-						for flavor in 1 0; do
-							g++ ./main.cpp -o a.out \
-							-DBTREE_EXPAND=$flavor -DBTREE_SIZE="$size" -DBTREE_Q="$q" -DBTREE_T="$t" -DBTREE_TP="$tp" -DBTREE_B="$b" -DBTREE_SEED="$seed"
-							./a.out >/dev/null
-							[[ "$?" -eq 0 ]] || continue
-							g++ -Ofast -DNDEBUG ./main.cpp -o a.out \
-							-DBTREE_EXPAND=$flavor -DBTREE_SIZE="$size" -DBTREE_Q="$q" -DBTREE_T="$t" -DBTREE_TP="$tp" -DBTREE_B="$b" -DBTREE_SEED="$seed"
-														for i in $(seq 1 $REPEATS); do
-															./a.out
-														done
+						g++ ./main.cpp -o a.out \
+						-DBTREE_EXPAND=0 -DBTREE_SIZE="$size" -DBTREE_Q="$q" -DBTREE_T="$t" -DBTREE_TP="$tp" -DBTREE_B="$b" -DBTREE_SEED="$seed"
+						./a.out >/dev/null
+						[[ "$?" -eq 0 ]] || continue
+						g++ -Ofast -DNDEBUG ./main.cpp -o a.out \
+						-DBTREE_EXPAND=0 -DBTREE_SIZE="$size" -DBTREE_Q="$q" -DBTREE_T="$t" -DBTREE_TP="$tp" -DBTREE_B="$b" -DBTREE_SEED="$seed"
+						for i in $(seq 1 $REPEATS); do
+							./a.out
 						done
 					done
 				done
