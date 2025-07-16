@@ -1,0 +1,3 @@
+[submodule "malloc_count"]
+	path = malloc_count
+	url = https://github.com/bingmann/malloc_count.git

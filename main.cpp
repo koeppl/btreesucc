@@ -16,6 +16,13 @@ static constexpr const char*const flavorstr = "expand";
 static constexpr const char*const flavorstr = "noexpand";
 #endif
 
+#ifndef MALLOC_COUNT
+#define MALLOC_COUNT 0
+#endif
+#if MALLOC_COUNT == 1
+#include "malloc_count.h"
+#endif
+
 static constexpr int SIZE = BTREE_SIZE;
 static constexpr uint32_t q =  BTREE_Q;  // q = 10, 20, 30
 static constexpr uint32_t t =  BTREE_T;  // t = 21, 31, 41
@@ -124,7 +131,10 @@ int main()
 							<< " tp=" << t_ - 1 
 							<< " b=" << b 
 							<< " q=" << q 
-							<< " flavor=" << flavorstr 
+							<< " flavor=" << flavorstr
+#if MALLOC_COUNT == 1
+                            << "_malloc_count ds_peak_bytes=" << malloc_count_peak() - BTREE_SIZE * sizeof(data[1])
+#endif
 							<< " internals=" << internals
 							<< " leaves=" << leaves
 							<< " insert_nano=" << inserttime

@@ -5,6 +5,13 @@
 #define BTREE_SIZE 100000
 #endif
 
+#ifndef MALLOC_COUNT
+#define MALLOC_COUNT 0
+#endif
+#if MALLOC_COUNT == 1
+#include "malloc_count.h"
+#endif
+
 #include <iostream>
 #include <chrono>
 #include <stdio.h>
@@ -75,6 +82,9 @@ int main()
     std::cout << "RESULT "
               << " size=" << BTREE_SIZE 
 							<< " flavor=stdset" 
+#if MALLOC_COUNT == 1
+                            << "_malloc_count ds_peak_bytes=" << malloc_count_peak() - BTREE_SIZE * sizeof(data[1])
+#endif
 							<< " insert_nano=" << inserttime
    							<< " find_nano=" << findtime
 							<< " remove_nano=" << removetime
