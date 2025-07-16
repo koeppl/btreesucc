@@ -48,6 +48,13 @@ namespace lb
             size_--;
         }
 
+        // currently only for integer keys
+        const uint64_t find(value_type x)
+        {
+            const leaf_node *leaf = root->locate_leaf(x);
+            return leaf->find(x);
+        }
+
         uint64_t byte_size()
         {
             assert(root != NULL);
@@ -314,6 +321,25 @@ namespace lb
             }
 
             return bs;
+        }
+
+        const leaf_node *locate_leaf(value_type x)
+        {
+            uint32_t insert_pos = size() - 1;
+            if (insert_pos == UINT32_MAX)
+                insert_pos = 0;
+
+            if (size() > 1 && x < get_keys_back())
+                insert_pos = find_child(x);
+
+            if (has_node1())
+            {
+                return static_cast<internal_node1 *>(children[insert_pos])->locate_leaf(x);
+            }
+            else
+            {
+                return static_cast<internal_node2 *>(children[insert_pos])->locate_leaf(x);
+            }
         }
 
         // 挿入類
@@ -1020,6 +1046,18 @@ namespace lb
             }
 
             return bs;
+        }
+
+        const leaf_node *locate_leaf(value_type x)
+        {
+            uint32_t pos = size() - 1;
+            if (pos == UINT32_MAX)
+                pos = 0;
+
+            if (size() > 1 && x < get_keys_back())
+                pos = find_leaf(x);
+
+            return leaves[pos];
         }
 
         void insert(value_type x) // キーの更新はこの階層で行う。
@@ -1948,6 +1986,29 @@ namespace lb
             return sizeof(leaf_node);
         }
 
+        uint64_t find(value_type x) const
+        {
+            uint32_t j = head;
+            for (int i = 0, trials = size(); i < trials; ++i)
+            {
+                if (x == keys[j])
+                {
+                    return keys[j];
+                }
+                else if (x < keys[j])
+                {
+                    break;
+                }
+
+                if (++j >= M_LEAF)
+                {
+                    j = 0;
+                }
+            }
+
+            return UINT32_MAX; // not found
+        }
+
         void insert(value_type x)
         {
             // assert(not is_full());
@@ -2108,7 +2169,7 @@ namespace lb
             num_of_keys_++;
         }
 
-        const uint32_t size()
+        const uint32_t size() const
         {
             return num_of_keys_;
         }
