@@ -5,6 +5,7 @@ set -x
 REPEATS=100
 
 seed=1
+flavor=0
 
 for size in 1310720 2359296 3407872; do
 	g++ ./stdset.cpp -o stdset.out \
@@ -28,7 +29,7 @@ for size in 1310720 2359296 3407872; do
 			for tp in $(seq $tplower 32 256) 512; do
 				((blower=tp*2))
 				for b in $(seq $blower 64 256) 1024; do
-						for flavor in 1 0; do
+						for flavor in 0; do
 							g++ ./main.cpp -o a.out \
 							-DBTREE_EXPAND=$flavor -DBTREE_SIZE="$size" -DBTREE_Q="$q" -DBTREE_T="$t" -DBTREE_TP="$tp" -DBTREE_B="$b" -DBTREE_SEED="$seed"
 							./a.out >/dev/null
