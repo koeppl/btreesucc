@@ -107,8 +107,8 @@ int main()
     // 以下の標準出力でメモリ使用量を取得
     std::cout << "RESULT "
               << " size=" << SIZE 
-							<< " t=" << t - 1 
-							<< " tp=" << t_ - 1 
+							<< " t=" << t
+							<< " tp=" << t_
 							<< " b=" << b 
 							<< " q=" << q 
 							<< " flavor=" << flavorstr 
